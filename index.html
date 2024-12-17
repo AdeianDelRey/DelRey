@@ -13,6 +13,12 @@
             text-decoration: none;
             font-size: 16px;
         }
+        .hidden-content {
+            display: none;
+        }
+        .open .hidden-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +51,13 @@ ym(96883785, "init", {
     <a href="#" class="whatsapp-button" target="_blank" id="open-button">
         Раскрытие
     </a>
+    
+    <!-- Скрытое содержимое -->
+    <div class="hidden-content">
+        <a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
+            Написать в WhatsApp (раскрытие)
+        </a>
+    </div>
 
     <!-- Объединенный скрипт amoSocialButton -->
     <script>
@@ -68,8 +81,9 @@ ym(96883785, "init", {
 
         // Добавление обработчика событий на кнопку раскрытия
         document.getElementById('open-button').addEventListener('click', function(event) {
-            // Открытие раскрывающей информации
-            amoSocialButton('open');
+            event.preventDefault();
+            // Раскрытие скрытого содержимого
+            document.querySelector('.hidden-content').classList.toggle('open');
         });
     </script>
 </body>

@@ -23,32 +23,40 @@
             font-size: 16px;
             margin-left: 10px;
         }
+        .transfer-button {
+            display: inline-block;
+            background-color: #007bff; /* синий */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .transfer-button:hover {
+            background-color: #0056b3; /* тёмно-синий при наведении */
+        }
     </style>
 </head>
 <body>
-    <a href="#" class="transfer-button" onclick="handleTransferClick()">
+
+<!-- Кнопки для отправки сообщений -->
+<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
+    Написать в WhatsApp
+</a>
+
+<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
+    Написать в Telegram
+</a>
+
+<!-- Новая кнопка Перенести -->
+<a href="#" class="transfer-button" target="_blank">
     Перенести
 </a>
-    <style>
-.transfer-button {
-    display: inline-block;
-    background-color: #007bff; /* насыщенный синий */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.transfer-button:hover {
-    background-color: #0056b3; /* тёмно-синий при наведении */
-}
-</style>
-</body>
 <script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
 
 <!-- Yandex.Metrika counter -->
@@ -70,15 +78,6 @@ ym(96883785, "init", {
 <noscript><div><img src="https://mc.yandex.ru/watch/96883785" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
-<!-- Кнопки для отправки сообщений -->
-<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
-    Написать в WhatsApp
-</a>
-
-<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
-    Написать в Telegram
-</a>
-
 <script>
     // Обработчик событий для кнопок
     document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
@@ -87,22 +86,11 @@ ym(96883785, "init", {
     document.querySelector('.telegram-button').addEventListener('click', function(event) {
         window.open(this.href, '_blank');
     });
+    document.querySelector('.transfer-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        alert("Открыть форму переноса пользователей между прокси");
+    });
 </script>
 
+</body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

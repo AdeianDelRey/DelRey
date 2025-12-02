@@ -26,79 +26,31 @@
     </style>
 </head>
 <body>
+    <a href="#" class="transfer-button" onclick="handleTransferClick()">
+    Перенести
+</a>
+    <style>
+.transfer-button {
+    display: inline-block;
+    background-color: #007bff; /* насыщенный синий */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.transfer-button:hover {
+    background-color: #0056b3; /* тёмно-синий при наведении */
+}
+</style>
 </body>
 <script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
 
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Перенос пользователей</title>
-  <style>
-    .proxy-transfer-button {
-      background-color: #007bff;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .proxy-transfer-button:hover {
-      background-color: #0056b3;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 8px;
-      width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    .modal-content h3 {
-      margin-top: 0;
-    }
-
-    .modal-content label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-
-    .modal-content select,
-    .modal-content input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    .modal-content .confirm-button {
-      background-color: #28a745;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .close-button {
-      float: right;
-      font-size: 20px;
-      cursor: pointer
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -138,6 +90,7 @@ ym(96883785, "init", {
 </script>
 
 </html>
+
 
 
 

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Кнопки WhatsApp и Telegram</title>
+    <title>Кнопки WhatsApp, Telegram и MAX</title>
     <style>
         .whatsapp-button {
             display: inline-block;
@@ -23,6 +23,22 @@
             font-size: 16px;
             margin-left: 10px;
         }
+        .max-button {
+            display: inline-block;
+            background-color: #6A5ACD; /* фиолетовый MAX */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .max-button:hover {
+            background-color: #4b3db3; /* темнее при наведении */
+        }
         .transfer-button {
             display: inline-block;
             background-color: #007bff; /* синий */
@@ -37,7 +53,7 @@
             transition: background-color 0.3s ease;
         }
         .transfer-button:hover {
-            background-color: #0056b3; /* тёмно-синий при наведении */
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -50,6 +66,11 @@
 
 <a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
     Написать в Telegram
+</a>
+
+<a href="https://max.ru/u/f9LHodD0cOKgifprAqYgXBRjTC5kQetyHiAnvm9-w_M23TdENHjlR-CfuuE" 
+   class="max-button" target="_blank">
+    Написать в MAX
 </a>
 
 <!-- Новая кнопка Перенести -->
@@ -84,6 +105,9 @@ ym(96883785, "init", {
         window.open(this.href, '_blank');
     });
     document.querySelector('.telegram-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    document.querySelector('.max-button').addEventListener('click', function(event) {
         window.open(this.href, '_blank');
     });
     document.querySelector('.transfer-button').addEventListener('click', function(event) {

@@ -1,120 +1,66 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Кнопки WhatsApp, Telegram и MAX</title>
-    <style>
-        .whatsapp-button {
-            display: inline-block;
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        .telegram-button {
-            display: inline-block;
-            background-color: #0088cc;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-        .max-button {
-            display: inline-block;
-            background-color: #6A5ACD; /* фиолетовый MAX */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .max-button:hover {
-            background-color: #4b3db3; /* темнее при наведении */
-        }
-        .transfer-button {
-            display: inline-block;
-            background-color: #007bff; /* синий */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .transfer-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Кнопка MAX (через :share)</title>
+<style>
+.max-button {
+  display:inline-block; background:#6A5ACD; color:#fff;
+  padding:10px 20px; border-radius:5px; text-decoration:none;
+  font-size:16px; font-weight:500; cursor:pointer;
+}
+.max-button:hover { background:#4b3db3; }
+</style>
 </head>
 <body>
 
-<!-- Кнопки для отправки сообщений -->
-<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
-    Написать в WhatsApp
+<a id="max-share-btn"
+   href="https://max.ru/:share?text="
+   class="max-button" target="_blank" rel="noopener">
+  Написать в MAX
 </a>
 
-<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
-    Написать в Telegram
-</a>
-
-<a href="https://max.ru/u/f9LHodD0cOKgifprAqYgXBRjTC5kQetyHiAnvm9-w_M23TdENHjlR-CfuuE" 
-   class="max-button" target="_blank">
-    Написать в MAX
-</a>
-
-<a href="https://max.ru/u/f9LHodD0cOLmha5i_nuq4T4tpxcIz8krqKAmoK8NSscahIdicOBPbkYmJN4?text=Привет,%20твой%20ID%20такой%20то&phone=375298943845&utm_source=site&utm_medium=button&utm_campaign=max_test"
-   class="max-button" target="_blank">
-    Написать в MAX (+375298943845)
-</a>
-
-
-<script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
-
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
+<!-- Yandex.Metrika -->
+<script>
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
 m[i].l=1*new Date();
-for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-ym(96883785, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true,
-        ecommerce:"dataLayer"
-});
+for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,
+a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+ym(96883785,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/96883785" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 
 <script>
-    // Обработчик событий для кнопок
-    document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
-    });
-    document.querySelector('.telegram-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
-    });
-    document.querySelector('.max-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
-    });
-    document.querySelector('.transfer-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        alert("Открыть форму переноса пользователей между прокси");
-    });
+// Шаблон сообщения. {y_counter} — clientID Метрики, {u_code} — идентификатор сессии.
+const TEMPLATE = "Здравствуйте! Пишу с сайта. (ym:{y_counter} u:{u_code})";
+
+function getYmClientId(counterId) {
+  return new Promise(resolve => {
+    if (typeof ym !== "function") return resolve("");
+    ym(counterId, "getClientID", id => resolve(id || ""));
+    setTimeout(() => resolve(""), 500); // на случай блокировщика
+  });
+}
+
+function uCode() {
+  // любой стабильный per-session идентификатор
+  let v = sessionStorage.getItem("u_code");
+  if (!v) {
+    v = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
+    sessionStorage.setItem("u_code", v);
+  }
+  return v;
+}
+
+document.getElementById("max-share-btn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const ymId = await getYmClientId(96883785);
+  const text = TEMPLATE
+    .replace("{y_counter}", ymId)
+    .replace("{u_code}", uCode());
+  const url = "https://max.ru/:share?text=" + encodeURIComponent(text);
+  window.open(url, "_blank", "noopener");
+});
 </script>
 
 </body>

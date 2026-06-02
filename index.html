@@ -1,18 +1,121 @@
-<a id="max-bot-btn"
-   href="https://max.ru/id132706993814_bot?start="
-   class="max-button" target="_blank" rel="noopener">
-  Написать в MAX
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кнопки WhatsApp, Telegram и MAX</title>
+    <style>
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .telegram-button {
+            display: inline-block;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .max-button {
+            display: inline-block;
+            background-color: #6A5ACD; /* фиолетовый MAX */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .max-button:hover {
+            background-color: #4b3db3; /* темнее при наведении */
+        }
+        .transfer-button {
+            display: inline-block;
+            background-color: #007bff; /* синий */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .transfer-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Кнопки для отправки сообщений -->
+<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
+    Написать в WhatsApp
 </a>
 
-<script>
-document.getElementById("max-bot-btn").addEventListener("click", async (e) => {
-  e.preventDefault();
-  const ymId = await new Promise(r => {
-    if (typeof ym !== "function") return r("");
-    ym(96883785, "getClientID", id => r(id || ""));
-    setTimeout(() => r(""), 500);
-  });
-  const payload = "ym_" + ymId + "_u_" + (sessionStorage.getItem("u_code") || Date.now());
-  window.open("https://max.ru/id132706993814_bot?start=" + encodeURIComponent(payload), "_blank", "noopener");
+<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
+    Написать в Telegram
+</a>
+
+<a href="https://max.ru/u/f9LHodD0cOKgifprAqYgXBRjTC5kQetyHiAnvm9-w_M23TdENHjlR-CfuuE" 
+   class="max-button" target="_blank">
+    Написать в MAX
+</a>
+
+<a href="https://max.ru/u/f9LHodD0cOLmha5i_nuq4T4tpxcIz8krqKAmoK8NSscahIdicOBPbkYmJN4?text=Привет,%20твой%20ID%20такой%20то&phone=375298943845&utm_source=site&utm_medium=button&utm_campaign=max_test"
+   class="max-button" target="_blank">
+    Написать в MAX (+375298943845)
+</a>
+
+
+<script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(96883785, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        ecommerce:"dataLayer"
 });
 </script>
+<noscript><div><img src="https://mc.yandex.ru/watch/96883785" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script>
+    // Обработчик событий для кнопок
+    document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    document.querySelector('.telegram-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    document.querySelector('.max-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    document.querySelector('.transfer-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        alert("Открыть форму переноса пользователей между прокси");
+    });
+</script>
+
+</body>
+</html>

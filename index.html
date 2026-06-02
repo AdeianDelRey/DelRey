@@ -1,67 +1,18 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>Кнопка MAX (через :share)</title>
-<style>
-.max-button {
-  display:inline-block; background:#6A5ACD; color:#fff;
-  padding:10px 20px; border-radius:5px; text-decoration:none;
-  font-size:16px; font-weight:500; cursor:pointer;
-}
-.max-button:hover { background:#4b3db3; }
-</style>
-</head>
-<body>
-
-<a id="max-share-btn"
-   href="https://max.ru/:share?text="
+<a id="max-bot-btn"
+   href="https://max.ru/id132706993814_bot?start="
    class="max-button" target="_blank" rel="noopener">
   Написать в MAX
 </a>
 
-<!-- Yandex.Metrika -->
 <script>
-(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-m[i].l=1*new Date();
-for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
-k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,
-a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-ym(96883785,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
-</script>
-
-<script>
-// Шаблон сообщения. {y_counter} — clientID Метрики, {u_code} — идентификатор сессии.
-const TEMPLATE = "Здравствуйте! Пишу с сайта. (ym:{y_counter} u:{u_code})";
-
-function getYmClientId(counterId) {
-  return new Promise(resolve => {
-    if (typeof ym !== "function") return resolve("");
-    ym(counterId, "getClientID", id => resolve(id || ""));
-    setTimeout(() => resolve(""), 500); // на случай блокировщика
-  });
-}
-
-function uCode() {
-  // любой стабильный per-session идентификатор
-  let v = sessionStorage.getItem("u_code");
-  if (!v) {
-    v = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
-    sessionStorage.setItem("u_code", v);
-  }
-  return v;
-}
-
-document.getElementById("max-share-btn").addEventListener("click", async (e) => {
+document.getElementById("max-bot-btn").addEventListener("click", async (e) => {
   e.preventDefault();
-  const ymId = await getYmClientId(96883785);
-  const text = TEMPLATE
-    .replace("{y_counter}", ymId)
-    .replace("{u_code}", uCode());
-  const url = "https://max.ru/:share?text=" + encodeURIComponent(text);
-  window.open(url, "_blank", "noopener");
+  const ymId = await new Promise(r => {
+    if (typeof ym !== "function") return r("");
+    ym(96883785, "getClientID", id => r(id || ""));
+    setTimeout(() => r(""), 500);
+  });
+  const payload = "ym_" + ymId + "_u_" + (sessionStorage.getItem("u_code") || Date.now());
+  window.open("https://max.ru/@your_bot?start=" + encodeURIComponent(payload), "_blank", "noopener");
 });
 </script>
-
-</body>
-</html>

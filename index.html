@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Кнопки WhatsApp, Telegram и MAX</title>
+    <title>Кнопки WhatsApp, Telegram и MAXBOT</title>
     <style>
         .whatsapp-button {
             display: inline-block;
@@ -25,7 +25,7 @@
         }
         .max-button {
             display: inline-block;
-            background-color: #6A5ACD; /* фиолетовый MAX */
+            background-color: #6A5ACD; /* фиолетовый MAXBOT */
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -38,22 +38,6 @@
         }
         .max-button:hover {
             background-color: #4b3db3; /* темнее при наведении */
-        }
-        .transfer-button {
-            display: inline-block;
-            background-color: #007bff; /* синий */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .transfer-button:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
@@ -68,18 +52,16 @@
     Написать в Telegram
 </a>
 
-<a href="https://max.ru/u/f9LHodD0cOKgifprAqYgXBRjTC5kQetyHiAnvm9-w_M23TdENHjlR-CfuuE" 
+<a id="maxbot-button" 
+   href="https://max.ru/id132706993814_bot" 
    class="max-button" target="_blank">
-    Написать в MAX
+    Написать в MAXBOT
 </a>
 
-<a href="https://max.ru/u/f9LHodD0cOLmha5i_nuq4T4tpxcIz8krqKAmoK8NSscahIdicOBPbkYmJN4?text=Привет,%20твой%20ID%20такой%20то&phone=375298943845&utm_source=site&utm_medium=button&utm_campaign=max_test"
-   class="max-button" target="_blank">
-    Написать в MAX (+375298943845)
-</a>
-
-
-<script id="crm-button-script" src="https://app.i2crm.ru/api_v1/js/crm_button_v2.js" data-ym-counters="96883785" data-endpoint="https://app.i2crm.ru/api_v1/metrics/key" data-text="Номер вашего обращения: {u_code}. Пожалуйста, отправьте это сообщение."></script>
+<script id="crm-button-script" src="https://app.i2crm.ru/api_v1/js/crm_button_v2.js" 
+        data-ym-counters="96883785" 
+        data-endpoint="https://app.i2crm.ru/api_v1/metrics/key" 
+        data-text="Номер вашего обращения: {u_code}. Пожалуйста, отправьте это сообщение."></script>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -101,7 +83,15 @@ ym(96883785, "init", {
 <!-- /Yandex.Metrika counter -->
 
 <script>
-    // Обработчик событий для кнопок
+    // Автоматическая подстановка UTM метки в ссылку MAXBOT
+    document.addEventListener("DOMContentLoaded", function() {
+        var maxbotBtn = document.getElementById("maxbot-button");
+        if (maxbotBtn && window.u_code) {
+            maxbotBtn.href = maxbotBtn.href + "?start=" + encodeURIComponent(window.u_code);
+        }
+    });
+
+    // Обработчики для кнопок
     document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
         window.open(this.href, '_blank');
     });
@@ -110,10 +100,6 @@ ym(96883785, "init", {
     });
     document.querySelector('.max-button').addEventListener('click', function(event) {
         window.open(this.href, '_blank');
-    });
-    document.querySelector('.transfer-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        alert("Открыть форму переноса пользователей между прокси");
     });
 </script>
 

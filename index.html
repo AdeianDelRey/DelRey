@@ -1,90 +1,41 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Кнопки WhatsApp, Telegram и MAXBOT</title>
-    <style>
-        .whatsapp-button {
-            display: inline-block;
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        .telegram-button {
-            display: inline-block;
-            background-color: #0088cc;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-        .max-button {
-            display: inline-block;
-            background-color: #6A5ACD; /* фиолетовый MAXBOT */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .max-button:hover {
-            background-color: #4b3db3; /* темнее при наведении */
-        }
-    </style>
-</head>
-<body>
-
-<!-- Кнопки для отправки сообщений -->
-<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
-    Написать в WhatsApp
-</a>
-
-<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
-    Написать в Telegram
-</a>
-
-<a id="maxbot-button" 
-   href="https://max.ru/id132706993814_bot" 
-   class="max-button" target="_blank">
-    Написать в MAXBOT
-</a>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var maxbotBtn = document.getElementById("maxbot-button");
         var params = new URLSearchParams(window.location.search);
-
-        // 1. Берём метку из URL (например ?utm_code=I2TEST999)
         var utm = null;
+
+        // Порядок приоритета:
+        // 1. Явно заданная метка utm_code
         if (params.has("utm_code")) {
             utm = params.get("utm_code");
         }
-
-        // 2. Если нет utm_code, пробуем взять из других UTM параметров
-        if (!utm && params.has("utm_source")) {
+        // 2. Яндекс часто использует utm_content для идентификатора объявления
+        else if (params.has("utm_content")) {
+            utm = params.get("utm_content");
+        }
+        // 3. utm_source (например, yandex, google)
+        else if (params.has("utm_source")) {
             utm = params.get("utm_source");
         }
-
-        // 3. Если crm_button_v2.js отдал u_code — используем его
-        if (!utm && window.u_code) {
+        // 4. utm_campaign
+        else if (params.has("utm_campaign")) {
+            utm = params.get("utm_campaign");
+        }
+        // 5. utm_term
+        else if (params.has("utm_term")) {
+            utm = params.get("utm_term");
+        }
+        // 6. Яндекс yclid (идентификатор клика)
+        else if (params.has("yclid")) {
+            utm = params.get("yclid");
+        }
+        // 7. Значение, переданное через CRM (если используется crm_button_v2.js)
+        else if (window.u_code) {
             utm = window.u_code;
         }
 
-        // 4. Подставляем в ссылку
         if (maxbotBtn && utm) {
             maxbotBtn.href = maxbotBtn.href + "?start=" + encodeURIComponent(utm);
         }
     });
 </script>
-
-</body>
-</html>

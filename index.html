@@ -58,68 +58,27 @@
     Написать в MAXBOT
 </a>
 
-<script id="crm-button-script" src="https://app.i2crm.ru/api_v1/js/crm_button_v2.js" 
-        data-ym-counters="96883785" 
-        data-endpoint="https://app.i2crm.ru/api_v1/metrics/key" 
-        data-text="Номер вашего обращения: {u_code}. Пожалуйста, отправьте это сообщение."></script>
-
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-m[i].l=1*new Date();
-for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-ym(96883785, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true,
-        ecommerce:"dataLayer"
-});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/96883785" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var maxbotBtn = document.getElementById("maxbot-button");
+
+        // 1. Берём UTM метку из URL (например ?utm_code=I2TEST999)
+        var params = new URLSearchParams(window.location.search);
         var utm = null;
 
-        // 1. Попробуем взять utm_source из dataLayer
-        if (window.dataLayer) {
-            for (var i = 0; i < window.dataLayer.length; i++) {
-                if (window.dataLayer[i].utm_source) {
-                    utm = window.dataLayer[i].utm_source;
-                    break;
-                }
-            }
+        if (params.has("utm_code")) {
+            utm = params.get("utm_code");
         }
 
-        // 2. Если нет — берём из URL параметров
-        if (!utm) {
-            var params = new URLSearchParams(window.location.search);
-            if (params.has("utm_source")) {
-                utm = params.get("utm_source");
-            }
+        // 2. Если нет utm_code, можно взять из других UTM параметров
+        if (!utm && params.has("utm_source")) {
+            utm = params.get("utm_source");
         }
 
         // 3. Подставляем в ссылку
         if (maxbotBtn && utm) {
             maxbotBtn.href = maxbotBtn.href + "?start=" + encodeURIComponent(utm);
         }
-    });
-
-    // Обработчики для кнопок
-    document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
-    });
-    document.querySelector('.telegram-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
-    });
-    document.querySelector('.max-button').addEventListener('click', function(event) {
-        window.open(this.href, '_blank');
     });
 </script>
 

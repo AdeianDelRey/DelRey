@@ -1,41 +1,188 @@
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var maxbotBtn = document.getElementById("maxbot-button");
-        var params = new URLSearchParams(window.location.search);
-        var utm = null;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кнопки WhatsApp, Telegram и MAX</title>
+    <style>
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .telegram-button {
+            display: inline-block;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .max-button {
+            display: inline-block;
+            background-color: #6A5ACD;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .max-button:hover {
+            background-color: #4b3db3;
+        }
+        /* Новая кнопка MAXBOT – такая же фиолетовая, но можно выделить */
+        .maxbot-button {
+            display: inline-block;
+            background-color: #6A5ACD;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .maxbot-button:hover {
+            background-color: #4b3db3;
+        }
+        .transfer-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .transfer-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
 
-        // Порядок приоритета:
-        // 1. Явно заданная метка utm_code
-        if (params.has("utm_code")) {
-            utm = params.get("utm_code");
-        }
-        // 2. Яндекс часто использует utm_content для идентификатора объявления
-        else if (params.has("utm_content")) {
-            utm = params.get("utm_content");
-        }
-        // 3. utm_source (например, yandex, google)
-        else if (params.has("utm_source")) {
-            utm = params.get("utm_source");
-        }
-        // 4. utm_campaign
-        else if (params.has("utm_campaign")) {
-            utm = params.get("utm_campaign");
-        }
-        // 5. utm_term
-        else if (params.has("utm_term")) {
-            utm = params.get("utm_term");
-        }
-        // 6. Яндекс yclid (идентификатор клика)
-        else if (params.has("yclid")) {
-            utm = params.get("yclid");
-        }
-        // 7. Значение, переданное через CRM (если используется crm_button_v2.js)
-        else if (window.u_code) {
-            utm = window.u_code;
-        }
+<!-- Кнопки для отправки сообщений -->
+<a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
+    Написать в WhatsApp
+</a>
 
-        if (maxbotBtn && utm) {
-            maxbotBtn.href = maxbotBtn.href + "?start=" + encodeURIComponent(utm);
-        }
-    });
+<a href="https://t.me/Excee_bot" class="telegram-button" target="_blank">
+    Написать в Telegram
+</a>
+
+<a href="https://max.ru/u/f9LHodD0cOKgifprAqYgXBRjTC5kQetyHiAnvm9-w_M23TdENHjlR-CfuuE" 
+   class="max-button" target="_blank">
+    Написать в MAX
+</a>
+
+<a href="https://max.ru/u/f9LHodD0cOLmha5i_nuq4T4tpxcIz8krqKAmoK8NSscahIdicOBPbkYmJN4?text=Привет,%20твой%20ID%20такой%20то&phone=375298943845&utm_source=site&utm_medium=button&utm_campaign=max_test"
+   class="max-button" target="_blank">
+    Написать в MAX (+375298943845)
+</a>
+
+<!-- Новая кнопка MAXBOT – ссылка будет дополнена динамически -->
+<a id="maxbot-button" 
+   href="https://max.ru/id132706993814_bot" 
+   class="maxbot-button" target="_blank">
+    Написать в MAXBOT
+</a>
+
+<!-- CRM-скрипты и Яндекс.Метрика (без изменений) -->
+<script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
+<script id="crm-button-script" src="https://app.i2crm.ru/api_v1/js/crm_button_v2.js" data-ym-counters="96883785" data-endpoint="https://app.i2crm.ru/api_v1/metrics/key" data-text="Номер вашего обращения: {u_code}. Пожалуйста, отправьте это сообщение."></script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+ym(96883785, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        ecommerce:"dataLayer"
+});
 </script>
+<noscript><div><img src="https://mc.yandex.ru/watch/96883785" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<script>
+    // Обработчики кликов для старых кнопок (оставлены как есть)
+    document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    document.querySelector('.telegram-button').addEventListener('click', function(event) {
+        window.open(this.href, '_blank');
+    });
+    // Для всех .max-button (две старые) и .maxbot-button открытие в новом окне
+    document.querySelectorAll('.max-button, .maxbot-button').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            window.open(this.href, '_blank');
+        });
+    });
+    document.querySelector('.transfer-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        alert("Открыть форму переноса пользователей между прокси");
+    });
+
+    // === Динамическое добавление ?start=... к кнопке MAXBOT ===
+    (function() {
+        var maxbotBtn = document.getElementById("maxbot-button");
+        if (!maxbotBtn) return;
+
+        // Ждём полной загрузки, чтобы CRM-скрипты успели отработать (если они асинхронные)
+        window.addEventListener('load', function() {
+            // Пробуем получить UTM-метку из разных источников
+            var params = new URLSearchParams(window.location.search);
+            var utm = null;
+
+            // Приоритет: utm_content, затем utm_source, utm_campaign, utm_term, потом window.u_code
+            if (params.has("utm_content")) {
+                utm = params.get("utm_content");
+            } else if (params.has("utm_source")) {
+                utm = params.get("utm_source");
+            } else if (params.has("utm_campaign")) {
+                utm = params.get("utm_campaign");
+            } else if (params.has("utm_term")) {
+                utm = params.get("utm_term");
+            } else if (typeof window.u_code !== "undefined" && window.u_code) {
+                utm = window.u_code;
+            }
+
+            // Если метка найдена — добавляем параметр start
+            if (utm) {
+                // Убедимся, что в href ещё нет параметров (базовая ссылка без ?)
+                var base = maxbotBtn.href.split('?')[0];
+                maxbotBtn.href = base + "?start=" + encodeURIComponent(utm);
+            } else {
+                // Для теста можно подставить тестовую метку (в продакшене удалить эту строку)
+                maxbotBtn.href += "?start=I2TEST999";
+            }
+
+            // Вывод в консоль для проверки
+            console.log("MAXBOT final link:", maxbotBtn.href);
+        });
+    })();
+</script>
+
+</body>
+</html>

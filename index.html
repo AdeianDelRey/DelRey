@@ -39,7 +39,7 @@
         .max-button:hover {
             background-color: #4b3db3;
         }
-        /* Новая кнопка MAXBOT – такая же фиолетовая, но можно выделить */
+        /* Новая кнопка MAXBOT – такая же фиолетовая */
         .maxbot-button {
             display: inline-block;
             background-color: #6A5ACD;
@@ -56,27 +56,10 @@
         .maxbot-button:hover {
             background-color: #4b3db3;
         }
-        .transfer-button {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .transfer-button:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
 
-<!-- Кнопки для отправки сообщений -->
 <a href="https://wa.me/375298943845" class="whatsapp-button" target="_blank">
     Написать в WhatsApp
 </a>
@@ -95,7 +78,7 @@
     Написать в MAX (+375298943845)
 </a>
 
-<!-- Новая кнопка MAXBOT – ссылка будет дополнена динамически -->
+<!-- Новая кнопка MAXBOT -->
 <a id="maxbot-button" 
    href="https://max.ru/id132706993814_bot" 
    class="maxbot-button" target="_blank">
@@ -126,22 +109,17 @@ ym(96883785, "init", {
 <!-- /Yandex.Metrika counter -->
 
 <script>
-    // Обработчики кликов для старых кнопок (оставлены как есть)
-    document.querySelector('.whatsapp-button').addEventListener('click', function(event) {
+    // Обработчики кликов для обычных кнопок (WhatsApp, Telegram, старые MAX)
+    document.querySelector('.whatsapp-button')?.addEventListener('click', function() {
         window.open(this.href, '_blank');
     });
-    document.querySelector('.telegram-button').addEventListener('click', function(event) {
+    document.querySelector('.telegram-button')?.addEventListener('click', function() {
         window.open(this.href, '_blank');
     });
-    // Для всех .max-button (две старые) и .maxbot-button открытие в новом окне
     document.querySelectorAll('.max-button, .maxbot-button').forEach(function(btn) {
-        btn.addEventListener('click', function(event) {
+        btn.addEventListener('click', function() {
             window.open(this.href, '_blank');
         });
-    });
-    document.querySelector('.transfer-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        alert("Открыть форму переноса пользователей между прокси");
     });
 
     // === Динамическое добавление ?start=... к кнопке MAXBOT ===
@@ -149,13 +127,11 @@ ym(96883785, "init", {
         var maxbotBtn = document.getElementById("maxbot-button");
         if (!maxbotBtn) return;
 
-        // Ждём полной загрузки, чтобы CRM-скрипты успели отработать (если они асинхронные)
-        window.addEventListener('load', function() {
-            // Пробуем получить UTM-метку из разных источников
+        function getUtmAndUpdateLink() {
             var params = new URLSearchParams(window.location.search);
             var utm = null;
 
-            // Приоритет: utm_content, затем utm_source, utm_campaign, utm_term, потом window.u_code
+            // Приоритет UTM-меток
             if (params.has("utm_content")) {
                 utm = params.get("utm_content");
             } else if (params.has("utm_source")) {
@@ -170,16 +146,32 @@ ym(96883785, "init", {
 
             // Если метка найдена — добавляем параметр start
             if (utm) {
-                // Убедимся, что в href ещё нет параметров (базовая ссылка без ?)
                 var base = maxbotBtn.href.split('?')[0];
                 maxbotBtn.href = base + "?start=" + encodeURIComponent(utm);
             } else {
-                // Для теста можно подставить тестовую метку (в продакшене удалить эту строку)
+                // Для теста подставляем тестовую метку (в продакшене убрать или заменить)
                 maxbotBtn.href += "?start=I2TEST999";
             }
 
-            // Вывод в консоль для проверки
             console.log("MAXBOT final link:", maxbotBtn.href);
+        }
+
+        // Сразу пробуем обновить (если CRM ещё не отработала, window.u_code может быть пустым)
+        getUtmAndUpdateLink();
+
+        // Если CRM скрипт выставляет u_code асинхронно, дадим ему немного времени
+        window.addEventListener('load', function() {
+            // Повторно проверим, вдруг u_code появился позже
+            if (typeof window.u_code !== "undefined" && window.u_code) {
+                // Уже подставлено, если utm был из URL, иначе обновим
+                var currentStart = new URL(maxbotBtn.href).searchParams.get('start');
+                if (!currentStart || currentStart === "I2TEST999") {
+                    // Перезаписываем, чтобы точно взять u_code
+                    var base = maxbotBtn.href.split('?')[0];
+                    maxbotBtn.href = base + "?start=" + encodeURIComponent(window.u_code);
+                    console.log("MAXBOT updated with u_code:", maxbotBtn.href);
+                }
+            }
         });
     })();
 </script>

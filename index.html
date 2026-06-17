@@ -85,7 +85,7 @@
     Написать в MAXBOT
 </a>
 
-<!-- CRM-скрипты и Яндекс.Метрика (без изменений) -->
+<!-- CRM-скрипты -->
 <script id="crm-wa-button-script" src="https://app.i2crm.ru/api_v1/js/crm_wa_button_v1.js" data-source="ym" data-text="Хай твой {u_code} и {y_counter}"></script>
 <script id="crm-button-script" src="https://app.i2crm.ru/api_v1/js/crm_button_v2.js" data-ym-counters="96883785" data-endpoint="https://app.i2crm.ru/api_v1/metrics/key" data-text="Номер вашего обращения: {u_code}. Пожалуйста, отправьте это сообщение."></script>
 
@@ -122,57 +122,37 @@ ym(96883785, "init", {
         });
     });
 
-    // === Динамическое добавление ?start=... к кнопке MAXBOT ===
+    // === Динамическая подстановка UTM-метки в кнопку MAXBOT ===
     (function() {
         var maxbotBtn = document.getElementById("maxbot-button");
         if (!maxbotBtn) return;
 
-        function getUtmAndUpdateLink() {
-            var params = new URLSearchParams(window.location.search);
-            var utm = null;
+        // Собираем метку из URL или из глобальной переменной (window.u_code)
+        var params = new URLSearchParams(window.location.search);
+        var utm = null;
 
-            // Приоритет UTM-меток
-            if (params.has("utm_content")) {
-                utm = params.get("utm_content");
-            } else if (params.has("utm_source")) {
-                utm = params.get("utm_source");
-            } else if (params.has("utm_campaign")) {
-                utm = params.get("utm_campaign");
-            } else if (params.has("utm_term")) {
-                utm = params.get("utm_term");
-            } else if (typeof window.u_code !== "undefined" && window.u_code) {
-                utm = window.u_code;
-            }
-
-            // Если метка найдена — добавляем параметр start
-            if (utm) {
-                var base = maxbotBtn.href.split('?')[0];
-                maxbotBtn.href = base + "?start=" + encodeURIComponent(utm);
-            } else {
-                // Для теста подставляем тестовую метку (в продакшене убрать или заменить)
-                maxbotBtn.href += "?start=I2TEST999";
-            }
-
-            console.log("MAXBOT final link:", maxbotBtn.href);
+        // Приоритет: сначала ищем в явных UTM-параметрах
+        if (params.has("utm_content")) {
+            utm = params.get("utm_content");
+        } else if (params.has("utm_source")) {
+            utm = params.get("utm_source");
+        } else if (params.has("utm_campaign")) {
+            utm = params.get("utm_campaign");
+        } else if (params.has("utm_term")) {
+            utm = params.get("utm_term");
+        } else if (typeof window.u_code !== "undefined" && window.u_code) {
+            // Если CRM скрипт выставил u_code
+            utm = window.u_code;
         }
 
-        // Сразу пробуем обновить (если CRM ещё не отработала, window.u_code может быть пустым)
-        getUtmAndUpdateLink();
-
-        // Если CRM скрипт выставляет u_code асинхронно, дадим ему немного времени
-        window.addEventListener('load', function() {
-            // Повторно проверим, вдруг u_code появился позже
-            if (typeof window.u_code !== "undefined" && window.u_code) {
-                // Уже подставлено, если utm был из URL, иначе обновим
-                var currentStart = new URL(maxbotBtn.href).searchParams.get('start');
-                if (!currentStart || currentStart === "I2TEST999") {
-                    // Перезаписываем, чтобы точно взять u_code
-                    var base = maxbotBtn.href.split('?')[0];
-                    maxbotBtn.href = base + "?start=" + encodeURIComponent(window.u_code);
-                    console.log("MAXBOT updated with u_code:", maxbotBtn.href);
-                }
-            }
-        });
+        if (utm) {
+            // Убираем возможные старые параметры (если вдруг уже есть ?start=...)
+            var base = maxbotBtn.href.split('?')[0];
+            maxbotBtn.href = base + "?start=" + encodeURIComponent(utm);
+            console.log("MAXBOT link updated with start=" + utm);
+        } else {
+            console.log("No UTM found, MAXBOT link remains unchanged.");
+        }
     })();
 </script>
 

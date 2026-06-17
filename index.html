@@ -61,21 +61,25 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var maxbotBtn = document.getElementById("maxbot-button");
-
-        // 1. Берём UTM метку из URL (например ?utm_code=I2TEST999)
         var params = new URLSearchParams(window.location.search);
-        var utm = null;
 
+        // 1. Берём метку из URL (например ?utm_code=I2TEST999)
+        var utm = null;
         if (params.has("utm_code")) {
             utm = params.get("utm_code");
         }
 
-        // 2. Если нет utm_code, можно взять из других UTM параметров
+        // 2. Если нет utm_code, пробуем взять из других UTM параметров
         if (!utm && params.has("utm_source")) {
             utm = params.get("utm_source");
         }
 
-        // 3. Подставляем в ссылку
+        // 3. Если crm_button_v2.js отдал u_code — используем его
+        if (!utm && window.u_code) {
+            utm = window.u_code;
+        }
+
+        // 4. Подставляем в ссылку
         if (maxbotBtn && utm) {
             maxbotBtn.href = maxbotBtn.href + "?start=" + encodeURIComponent(utm);
         }
